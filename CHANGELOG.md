@@ -1,6 +1,6 @@
 # Release Notes for craft-meteo
 
-## 5.0.1 - 5.0.3
+## 5.0.1 - 5.0.4
 - Fix extra vars per time granularity persistence
 - General cleanup & refactoring
 

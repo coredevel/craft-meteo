@@ -71,10 +71,10 @@ class Settings extends Model
     ];
 
     public array $extraVariables  = [
-        self::GRANULARITY_CURRENT => [],
-        self::GRANULARITY_MINUTELY_15 => [],
-        self::GRANULARITY_HOURLY => [],
-        self::GRANULARITY_DAILY => [],
+        self::GRANULARITY_CURRENT => '',
+        self::GRANULARITY_MINUTELY_15 => '',
+        self::GRANULARITY_HOURLY => '',
+        self::GRANULARITY_DAILY => '',
     ];
 
     public int $cacheDuration = 3600; // seconds
