@@ -29,7 +29,7 @@ A headless weather plugin for Craft CMS using the Open-Meteo API.
 
 **With Composer:**
 ```bash
-composer require coredev/craft-meteo
+composer require coredevelopment/craft-meteo
 ./craft plugin/install craft-meteo
 ```
 
