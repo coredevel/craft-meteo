@@ -1,0 +1,149 @@
+{% extends '_layouts/cp' %}
+{% set title = 'Weather Admin' %}
+
+{% block content %}
+{% import '_includes/forms' as forms %}
+
+<div class="field">
+    <div class="heading"><label>How to use in your template:</label></div>
+    <div class="instructions"><p>Access weather data in your template using <code>craft.meteo.getWeather()</code>. Example below uses your current settings.</p></div>
+</div>
+
+<div class="field" id="latlong-finder" style="margin-bottom:1.5em;">
+    <div class="heading"><label for="location-search">Find Latitude/Longitude by Place Name</label></div>
+    <div class="input" style="display:flex;align-items:center;gap:0.5em;max-width:500px;">
+        <input type="text" id="location-search" class="text fullwidth" placeholder="Enter a city, address, etc." autocomplete="off">
+        <button type="button" id="search-location" class="btn">Search</button>
+        <div id="latlong-spinner" class="spinner hidden"></div>
+    </div>
+    <div id="location-results" style="margin-top: 10px;"></div>
+</div>
+
+<form method="post" accept-charset="UTF-8">
+    {{ csrfInput() }}
+    <h2>Location</h2>
+    {{ forms.textField({
+        label: 'Latitude',
+        id: 'latitude',
+        name: 'latitude',
+        value: settings.latitude,
+        type: 'number',
+        step: '0.0000001',
+        required: true
+    }) }}
+    {{ forms.textField({
+        label: 'Longitude',
+        id: 'longitude',
+        name: 'longitude',
+        value: settings.longitude,
+        type: 'number',
+        step: '0.0000001',
+        required: true
+    }) }}
+    {{ forms.textField({
+        label: 'Timezone',
+        id: 'timezone',
+        name: 'timezone',
+        value: settings.timezone,
+        placeholder: 'UTC',
+    }) }}
+    <h2>Units</h2>
+    {{ forms.selectField({
+        label: 'Temperature Unit',
+        id: 'temperatureUnit',
+        name: 'temperatureUnit',
+        value: settings.temperatureUnit,
+        options: [
+            {label: 'Celsius (°C)', value: 'celsius'},
+            {label: 'Fahrenheit (°F)', value: 'fahrenheit'}
+        ]
+    }) }}
+    {{ forms.selectField({
+        label: 'Wind Speed Unit',
+        id: 'windspeedUnit',
+        name: 'windspeedUnit',
+        value: settings.windspeedUnit,
+        options: [
+            {label: 'km/h', value: 'kmh'},
+            {label: 'mph', value: 'mph'}
+        ]
+    }) }}
+    {{ forms.selectField({
+        label: 'Precipitation Unit',
+        id: 'precipitationUnit',
+        name: 'precipitationUnit',
+        value: settings.precipitationUnit,
+        options: [
+            {label: 'Millimeter (mm)', value: 'mm'},
+            {label: 'Inches (in)', value: 'inch'}
+        ]
+    }) }}
+    {{ forms.selectField({
+        label: 'Time Format',
+        id: 'timeformat',
+        name: 'timeformat',
+        value: settings.timeformat,
+        options: [
+            {label: 'ISO 8601 (e.g. 2025-07-10)', value: 'iso8601'},
+            {label: 'Unix Timestamp', value: 'unixtime'}
+        ]
+    }) }}
+    <h2>Forecast Settings</h2>
+    <div class="meteo-tabs">
+      <ul class="meteo-tabs-nav">
+        {% for granularity in settings.granularityOptions|keys %}
+          <li><button type="button" class="{% if loop.first %}active{% endif %}">{{ granularity|capitalize }}</button></li>
+        {% endfor %}
+      </ul>
+      <div class="meteo-tabs-content">
+        {% for granularity in settings.granularityOptions|keys %}
+          <div style="display: {% if loop.first %}block{% else %}none{% endif %}">
+            {{ forms.checkboxGroupField({
+              label: granularity|capitalize ~ ' Variables',
+              id: granularity ~ 'Variables',
+              name: granularity ~ 'Variables',
+              values: settings.selectedVariables[granularity] ?? [],
+              options: settings.getGranularityOptionsFor(granularity)
+            }) }}
+            {{ forms.textField({
+              label: 'Extra ' ~ granularity|capitalize ~ ' Variables (comma-separated)',
+              id: 'extra' ~ granularity|capitalize ~ 'Variables',
+              name: 'extra' ~ granularity|capitalize ~ 'Variables',
+              value: settings['extra' ~ granularity|capitalize ~ 'Variables'] ?? '',
+              placeholder: 'extra_var1, extra_var2',
+            }) }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {{ forms.textField({
+        label: 'Cache Duration (seconds)',
+        id: 'cacheDuration',
+        name: 'cacheDuration',
+        value: settings.cacheDuration ?? 3600,
+        type: 'number',
+        min: 60,
+        required: true
+    }) }}
+    <button type="submit" class="btn submit">Save Settings</button>
+</form>
+
+{# --- Example Weather Data Dump --- #}
+{% set exampleWeather = (settings ? craft.meteo.getWeather(settings.latitude, settings.longitude) : null) %}
+{% if exampleWeather %}
+    <div class="field" style="background: #e8f7ff; border: 1px solid #b6e0fe; padding: 1em; margin-top: 2em;">
+        <div class="heading"><label>Example Weather Data:</label></div>
+        <pre style="margin:0; background:#f4f4f4; padding:0.5em; border-radius:4px;">{{ exampleWeather|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+    </div>
+{% endif %}
+
+<div class="field" style="margin-top:2em;">
+    <form method="post" action="{{ url('actions/craft-meteo/admin/clear-cache') }}">
+        {{ csrfInput() }}
+        <button type="submit" class="btn">Clear Weather Cache</button>
+    </form>
+</div>
+{% endblock %}
+
+{# Register AssetBundle for plugin JS/CSS #}
+{% do craft.app.view.registerAssetBundle('CoreDev\\Meteo\\assetbundles\\MeteoCpAsset') %}

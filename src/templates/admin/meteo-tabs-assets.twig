@@ -1,0 +1,52 @@
+<style>
+.meteo-tabs {
+  display: flex;
+  min-height: 300px;
+}
+.meteo-tabs-nav {
+  flex: 0 0 180px;
+  border-right: 1px solid #e0e0e0;
+  background: #fafbfc;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.meteo-tabs-nav li {
+  margin: 0;
+  padding: 0;
+}
+.meteo-tabs-nav button {
+  width: 100%;
+  padding: 1em;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  border-bottom: 1px solid #e0e0e0;
+}
+.meteo-tabs-nav button.active {
+  background: #e8f7ff;
+}
+.meteo-tabs-content {
+  flex: 1 1 auto;
+  padding: 1em 2em;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const navButtons = document.querySelectorAll('.meteo-tabs-nav button');
+  const tabPanels = document.querySelectorAll('.meteo-tabs-content > div');
+  navButtons.forEach((btn, idx) => {
+    btn.addEventListener('click', function() {
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabPanels.forEach((panel, i) => {
+        panel.style.display = (i === idx) ? 'block' : 'none';
+      });
+    });
+  });
+  // Show first tab by default
+  if (navButtons.length) navButtons[0].click();
+});
+</script>

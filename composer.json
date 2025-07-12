@@ -1,0 +1,70 @@
+{
+  "name": "coredev/craft-meteo",
+  "description": "A headless weather plugin for Craft CMS using the Open-Meteo API.",
+  "version": "5.0.0",
+  "type": "craft-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Richard Delph",
+      "homepage": "https://core.je"
+    },
+    {
+      "name": "Jonny Sellers",
+      "homepage": "https://www.ipopdigital.com"
+    }
+  ],
+  "support": {
+    "email": "info@ipopdigital.com",
+    "issues": "https://github.com/coredevel/craft-meteo/issues?state=open",
+    "source": "https://github.com/coredevel/craft-meteo",
+    "docs": "https://github.com/coredevel/craft-meteo",
+    "rss": "https://github.com/coredevel/craft-meteo/releases.atom"
+  },
+  "keywords": [
+    "craftcms",
+    "weather",
+    "plugin",
+    "open-meteo",
+    "forecast",
+    "api",
+    "headless",
+    "ipopdigital"
+  ],
+  "require": {
+    "php": ">=8.2",
+    "craftcms/cms": "^5.8.0"
+  },
+  "require-dev": {
+    "craftcms/ecs": "dev-main",
+    "craftcms/phpstan": "dev-main",
+    "phpstan/phpstan": "^1.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "CoreDev\\Meteo\\": "src/"
+    }
+  },
+  "extra": {
+    "handle": "craft-meteo",
+    "name": "Meteo",
+    "developer": "Core Development x iPop Digital",
+    "documentationUrl": "https://github.com/coredevel/craft-meteo",
+    "class": "CoreDev\\Meteo\\Meteo"
+  },
+  "scripts": {
+    "check-cs": "ecs check --ansi",
+    "fix-cs": "ecs check --ansi --fix",
+    "phpstan": "phpstan --memory-limit=1G"
+  },
+  "config": {
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2"
+    },
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "craftcms/plugin-installer": true
+    }
+  }
+}
