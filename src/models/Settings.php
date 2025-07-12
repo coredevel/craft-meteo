@@ -62,7 +62,15 @@ class Settings extends Model
         ],
     ];
 
+
     public array $selectedVariables = [
+        self::GRANULARITY_CURRENT => [],
+        self::GRANULARITY_MINUTELY_15 => [],
+        self::GRANULARITY_HOURLY => [],
+        self::GRANULARITY_DAILY => [],
+    ];
+
+    public array $extraVariables  = [
         self::GRANULARITY_CURRENT => [],
         self::GRANULARITY_MINUTELY_15 => [],
         self::GRANULARITY_HOURLY => [],
@@ -77,7 +85,7 @@ class Settings extends Model
             [['latitude', 'longitude'], 'number'],
             [['timezone', 'temperatureUnit', 'windspeedUnit', 'precipitationUnit', 'timeformat'], 'string'],
             [['forecastDays', 'pastDays', 'cacheDuration'], 'integer'],
-            [['selectedVariables'], 'safe'],
+            [['selectedVariables', 'extraVariables'], 'safe'],
         ];
     }
 

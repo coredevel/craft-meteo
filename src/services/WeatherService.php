@@ -78,10 +78,14 @@ class WeatherService extends Component
                     $selectedVars[] = 'is_day';
                 }
             }
-            Craft::info("Granularity: $granularity | Selected: " . json_encode($selectedVars), __METHOD__);
-            $filtered = array_values(array_intersect($selectedVars, $validVars));
-            if (!empty($filtered)) {
-                $params[$granularity] = implode(',', $filtered);
+            // Add extra variables from settings.extraVariables[granularity] (comma-separated)
+            $extraVars = [];
+            if (!empty($settings->extraVariables[$granularity])) {
+                $extraVars = array_map('trim', explode(',', $settings->extraVariables[$granularity]));
+            }
+            $allVars = array_unique(array_filter(array_merge($selectedVars, $extraVars)));
+            if (!empty($allVars)) {
+                $params[$granularity] = implode(',', $allVars);
             }
         }
 
@@ -90,7 +94,9 @@ class WeatherService extends Component
         $cacheDuration = $settings->cacheDuration ?? 3600; // 1 hour
 
         $result = Craft::$app->cache->getOrSet($cacheKey, function() use ($params) {
-            return $this->fetchFromApi($params);
+            $data = $this->fetchFromApi($params);
+            Craft::info('WeatherService: Fresh data fetched from API', __METHOD__);
+            return $data;
         }, $cacheDuration);
 
         // Post-process: append icon/description if weather_code present
@@ -152,7 +158,7 @@ class WeatherService extends Component
     {
         $client = Craft::createGuzzleClient();
         $url = $this->baseUrl . '?' . http_build_query($params);
-        Craft::info($url);
+
         try {
             $response = $client->get($url)->getBody()->getContents();
             $data = \craft\helpers\Json::decode($response);

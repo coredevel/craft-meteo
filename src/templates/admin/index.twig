@@ -19,7 +19,7 @@
     <div id="location-results" style="margin-top: 10px;"></div>
 </div>
 
-<form method="post" accept-charset="UTF-8">
+<form method="post" accept-charset="UTF-8" action="{{ url('actions/craft-meteo/admin/index') }}">
     {{ csrfInput() }}
     <h2>Location</h2>
     {{ forms.textField({
@@ -109,7 +109,7 @@
               label: 'Extra ' ~ granularity|capitalize ~ ' Variables (comma-separated)',
               id: 'extra' ~ granularity|capitalize ~ 'Variables',
               name: 'extra' ~ granularity|capitalize ~ 'Variables',
-              value: settings['extra' ~ granularity|capitalize ~ 'Variables'] ?? '',
+              value: settings.extraVariables[granularity] ?? '',
               placeholder: 'extra_var1, extra_var2',
             }) }}
           </div>

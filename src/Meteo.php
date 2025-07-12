@@ -52,18 +52,6 @@ class Meteo extends Plugin
                 $event->sender->set('meteo', \CoreDev\Meteo\variables\MeteoVariable::class);
             }
         );
-        
-        Craft::info(
-            Craft::t(
-                'craft-meteo',
-                'Meteo plugin loaded'
-            ),
-            __METHOD__
-        );
-
-        Craft::$app->onInit(function() {
-            // Reserved for post-Craft init logic.
-        });
 
         // Register admin controller for cache clearing
         Craft::$app->controllerMap['craft-meteo/admin'] = AdminController::class;
@@ -102,10 +90,5 @@ class Meteo extends Plugin
             'plugin' => $this,
             'settings' => $this->getSettings(),
         ]);
-    }
-
-    private function attachEventHandlers(): void
-    {
-        // Register event handlers here ...
     }
 }
