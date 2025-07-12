@@ -1,7 +1,7 @@
 {
   "name": "coredevelopment/craft-meteo",
   "description": "A headless weather plugin for Craft CMS using the Open-Meteo API.",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "type": "craft-plugin",
   "license": "MIT",
   "authors": [
