@@ -73,7 +73,7 @@ class Meteo extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function($event) {
-                $event->rules['meteo'] = 'craft-meteo/admin-panel/index';
+                $event->rules['meteo'] = 'craft-meteo/admin/index';
             }
         );
 
@@ -92,16 +92,6 @@ class Meteo extends Plugin
     protected function createSettingsModel(): ?Model
     {
         return Craft::createObject(Settings::class);
-    }
-
-    protected function settingsHtml(): ?string
-    {
-        // Register AssetBundle for settings page
-        Craft::$app->getView()->registerAssetBundle(\CoreDev\Meteo\assetbundles\MeteoCpAsset::class);
-        return Craft::$app->view->renderTemplate('craft-meteo/_settings.twig', [
-            'plugin' => $this,
-            'settings' => $this->getSettings(),
-        ]);
     }
 
     private function attachEventHandlers(): void
